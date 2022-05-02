@@ -1,16 +1,28 @@
 package domain;
 
+import exception.NotEnoughStockException;
+
 import javax.persistence.*;
 
 @Entity
+@Table(name = "item")
 public class Item {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     private Long id;
     private String name;
     private int price;
     private int stockQuantity;
+
+    public void reduceStock(int quantity) {
+        int restStock = stockQuantity - quantity;
+
+        if (restStock < 0) {
+            throw new NotEnoughStockException("need more stock");
+        }
+        this.stockQuantity = restStock;
+    }
 
     public Long getId() {
         return id;
@@ -42,5 +54,15 @@ public class Item {
 
     public void setStockQuantity(int stockQuantity) {
         this.stockQuantity = stockQuantity;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", stockQuantity=" + stockQuantity +
+                '}';
     }
 }

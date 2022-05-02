@@ -3,9 +3,10 @@ package domain;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "order_item")
 public class OrderItem {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_item_id")
     private Long id;
 
@@ -20,6 +21,17 @@ public class OrderItem {
     private int orderPrice;
 
     private int count;
+
+    public OrderItem() {
+
+    }
+
+    public OrderItem(Item item, int count) {
+        this.item = item;
+        this.orderPrice = item.getPrice();
+        this.count = count;
+        item.reduceStock(count);
+    }
 
     public Long getId() {
         return id;
@@ -59,5 +71,16 @@ public class OrderItem {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "id=" + id +
+                ", order=" + order +
+                ", item=" + item +
+                ", orderPrice=" + orderPrice +
+                ", count=" + count +
+                '}';
     }
 }
