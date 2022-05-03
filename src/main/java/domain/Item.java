@@ -3,6 +3,8 @@ package domain;
 import exception.NotEnoughStockException;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "item")
@@ -14,6 +16,9 @@ public class Item {
     private String name;
     private int price;
     private int stockQuantity;
+
+    @ManyToMany(mappedBy = "items")
+    private List<Category> categories = new ArrayList<>();
 
     public void reduceStock(int quantity) {
         int restStock = stockQuantity - quantity;
